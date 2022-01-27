@@ -93,6 +93,8 @@ As you can see in the previous section, with Telegram, I take full advantage of 
 I know that it is very difficult to make by someone, or rather, that you can make it but perhaps with more modern components such as ARDUINO or SIP Client.
 However, I wanted to share my project with you given the many requests.
 For the more adventurous I leave the ProtonIDE .bas files in the GitHub for the pic, if anyone wants to try to replicate it.
+
 In case of doubts / help or clarifications I am at your disposal in the GitHub issues or on Filippo.toni@ifcorp.it
+
 Lang: Italian / English
 
