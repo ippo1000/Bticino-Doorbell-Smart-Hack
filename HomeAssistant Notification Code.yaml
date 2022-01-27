@@ -1,0 +1,110 @@
+automation: 
+- id: 'Bellinteract'
+  alias: Bellinteract
+  # hide_entity: true
+  initial_state: 'on'
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.doorbell # Sonoff or your system
+    to: 'on'
+  action:
+  
+  - service: camera.snapshot
+    data:
+      entity_id: camera.yourcamera
+      filename: '/config/www/doorbell.png'
+      
+  - service: notify.filippo
+    data_template:
+      title: 'Bell {{ "\U0001F514" }}'
+      message: 'Someone is at the door, What do you want to do? ' 
+      data:
+        inline_keyboard:
+        - '{{ "\U0001F6AA" }} Open Gate:/siped,{{ "\U0001F645" }} Nothing:/noped' 
+        - '{{ "\U0001F4F2" }} TalkExt:/callout,{{ "\U0001F3A5" }} Send Another Snap:/snapF'
+        photo:
+         - file: '/config/www/doorbell.png'
+        
+
+  - service: script.bellpopup #This script opens a popup on my wall dashboard (If you want it contact me)
+
+#   - service: script.cameratv # This Script opens a popup on my TV (If you want it contact me)
+
+
+###################################################ALEXA NOTIFICATION OF BELL####################################################    
+  - service: notify.alexa_media
+    data:
+      message: >-
+        Doorbell Ring!!
+      data:
+        type: tts
+      target:
+        - media_player.show
+        - media_player.echo
+        - media_player.wall
+#        - media_player.tv
+#        - media_player.firetv
+###################################################ALEXA NOTIFICATION OF BELL####################################################    
+        
+# If i ask to open the Gate Automation: 
+- id: Bell-siped
+  alias: Bell-siped
+  trigger:
+  - platform: event
+    event_type: telegram_callback
+    event_data:
+      data: /siped
+  action:
+  - service: telegram_bot.answer_callback_query
+    data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      message: l
+  - service: notify.filippo
+    data_template:
+      message: >- 
+        Gate Open OK
+  - service: switch.turn_on
+    target:
+      entity_id: switch.gate # Your Gate Relay Entity
+      
+# If i ask do nothing      
+- id: Bell-noped
+  alias: Bell-noped
+  trigger:
+  - platform: event
+    event_type: telegram_callback
+    event_data:
+      data: /noped
+  action:
+  - service: telegram_bot.answer_callback_query
+    data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      message: lut
+  - service: notify.filippo
+    data_template:
+      message: >- 
+        No worries, i'll be in pace for some time! :)  {{ "\U0001F5A5" }}
+
+# If i ask a Call (And someone is at home, so it is not automatic)        
+- id: Bell-callout
+  alias: Bell-callout
+  trigger:
+  - platform: event
+    event_type: telegram_callback
+    event_data:
+      data: /callout
+  action:
+  - service: telegram_bot.answer_callback_query
+    data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      message: lut
+  - service: notify.filippo
+    data_template:
+      title: Call
+      message: Call Triggered
+
+  - service: switch.turn_on
+    target: 
+      entity_id: switch.your_call_entity # Put here your Call trigger Relay Entity
+
+    
