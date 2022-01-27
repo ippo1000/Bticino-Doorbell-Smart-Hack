@@ -11,11 +11,15 @@ The second part instead consists in making a call when the intercom is ringed, o
 ## Telephone Call - Part1
 The call is activated by the home automation system (Home Assistant) which only in the absence of people provides the trigger signal and detects the status of the call and the intercom. 
 In homes equipped with optical fiber or VoIP telephony, the PSTN line is provided by the provider's modem, generally with very low latency.
+
 [![Telephone and Doorbell IMG](https://i.ibb.co/br6zmGs/IMG-Cit-F-e-Phone.png)](https://amzn.to/33UsbeN)
+
 The prototype is made up of various separate elements housed in a GW42004 type panel with dimensions 300X200X40.
 Easily and with a little knowledge of the subject it is possible to compact everything and design a PCB.
 If any of you have the imagination to do so, all changes or requests for changes are welcome.
+
 ![The Prototype](https://i.ibb.co/wyqVSGx/Cit-F-Photo.png)
+
 Below is the description of the "Main" components I used: 
 - One Bticino 2 wire internal unit [(PI 344232)](https://amzn.to/3ABGFMD)
 - Vintage SIP Phone
@@ -28,6 +32,7 @@ Below is the description of the "Main" components I used:
 PI 344232 is the cheapest of the 2-wire line. It has 2 buttons, one to open the gate, the other configurable by the installer. 
 In this case the second button is configured as "Door unit activation" by inserting configurator "9" in position "P". 
 The Bticino configurator "9" is hacked, creating it with 2 resistors in parallel to achieve the exact value of 179 KOhm.
+
 ![Changes](https://i.ibb.co/Ntb8dkg/Mod-Posto-Interno-Cit.png)
 
 In addition, the following must be implemented (You have to do them yourself): 
@@ -44,7 +49,9 @@ In case of local activation, the telephone call is not launched. This occurs in 
 In this case the off-hook signal to the telephone is kept high for the entire time activation of the Intercom.
 Bticino Intercom automatically cancels the call after one minute. The controller, counted 61 seconds from the first activation, activates the PE button again for a total of 2 minutes of conversation.
 At the end of the 2 minutes, or if the red external button is pressed, the intercom returns to "ON-HOOK" and the call / off-hook signal to the telephone is closed. 
+
 ![RED BTN](https://i.ibb.co/VpwZqc8/BTNS.png)
+
 # Modification Vintage SIP Telephone and Dialer with PIC16F877A
 Here too, the double diverter activated when the handset is lifted is removed and replaced by a DPDT relay. The microphone and loudspeaker signals are picked up in parallel with the handset by means of 2 600 OHM audio transformers.
 As for the dialer, the keyboard connected to the appropriate inputs of the integrated HT9212A dialer present in the phone is physically replaced. Each row is assigned a relay, as well as each column. 
@@ -66,7 +73,9 @@ I currently use my home system made by myself about 15 years ago with PICs and a
 But a few months ago to play I decided to post all my sensors of my system on MQTT, and so also the intercom.
 As you can see in this photo below thanks to HA and Telegram I managed to make this fantastic notification!
 In case of DoorBell Ring (Taken from this "Box") an input of my system goes up (1) (you can use a normal Sonoff CC) and MQTT sends the status to HA, which sends a Telegram notification.
+
 ![HA Notify ](https://i.ibb.co/ZxP4HDG/Notify-Blur-Little.png)
+
 Thanks to my ONVIF cameras, I will receive a SnapShot of who is at the door, and underneath I have buttons to interact with my home.
 
 - The "Apri il Pedonale" button sends an input on MQTT which triggers a relay, which again, thanks to the box, opens the gate.
@@ -86,3 +95,4 @@ However, I wanted to share my project with you given the many requests.
 For the more adventurous I leave the ProtonIDE .bas files in the GitHub for the pic, if anyone wants to try to replicate it.
 In case of doubts / help or clarifications I am at your disposal in the GitHub issues or on Filippo.toni@ifcorp.it
 Lang: Italian / English
+
